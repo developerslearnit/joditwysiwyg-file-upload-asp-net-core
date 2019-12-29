@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div style="padding:0 30px" class="container">
+
+    <textarea id="editor"></textarea>
+
+    
+
+</div>
+
+
+@section Scripts{
+
+    <script>
+        $(function () {
+
+            var uploadOptions = {
+                enableDragAndDropFileToEditor: true,
+                uploader: {
+                    url: 'file/upload',
+                    isSuccess: function (resp) {
+                        return resp;
+                    },
+                    process: function (resp) {                       
+                        return {
+                            files: resp.data.files,
+                            path: resp.data.path,
+                            baseurl: resp.data.baseurl,
+                            error: resp.data.error,
+                            message: resp.data.message
+                        }
+                    },
+                    defaultHandlerSuccess: function (data) {
+                        var i, field = 'files';                      
+                        if (data[field] && data[field].length) {
+                            for (i = 0; i < data[field].length; i += 1) {
+                                this.selection.insertImage(data.baseurl + data[field][i]);
+                            }
+                        }
+                    },
+                }
+            }
+
+            var editor = new Jodit("#editor", uploadOptions);
+
+        });
+    </script>
+
+
+}
